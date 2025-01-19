@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -9,10 +10,11 @@ app.use(cors());
 const bcrypt = require('bcryptjs');
 app.use(bodyParser.json());
 
-const mongoUrl = "mongodb+srv://ingsantana36:HoHXlhVkV7DusPsR@cluster0.o40ez.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+//const mongoUrl = "mongodb+srv://ingsantana36:HoHXlhVkV7DusPsR@cluster0.o40ez.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const MONGO_HOST = process.env.MONGO_HOST || 'localhost'; 
+const MONGO_URI = process.env.MONGO_URI || `mongodb://${MONGO_HOST}:27017/meanAuth`;
 
-
-mongoose.connect(mongoUrl,{
+mongoose.connect(MONGO_URI,{
     useNewUrlParser:true,
 })
 .then(()=>{console.log("Connected to Database");})
@@ -56,6 +58,7 @@ app.post('/login',async(req,res)=>{
           return res.json({status:"Invalid Email/Password"});
       }
     }catch(err){
+        console.log(err);
         res.status(500).json({status:"error"});
     }
 });
