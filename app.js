@@ -32,7 +32,7 @@ app.post('/register',async(req,res)=>{
     const {fname, lname, email, password }=req.body;
     const encryptedPassword = await bcrypt.hash(password,10);
     try{
-        const oldUser = await User.findOne({email});
+        const oldUser = await User.findOne({email: email});
         if(oldUser){
            return res.json({error:"User Exist.."});
         }
@@ -53,10 +53,11 @@ app.post('/login',async(req,res)=>{
     const {email, password}=req.body;
 
     try{
-        const user = await User.findOne({email});
+        const user = await User.findOne({email: email});
       if(!user || !(await user.comparePassword(password))){
           return res.json({status:"Invalid Email/Password"});
       }
+      res.send({status:"ok"});
     }catch(err){
         console.log(err);
         res.status(500).json({status:"error"});
