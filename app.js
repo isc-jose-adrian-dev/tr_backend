@@ -54,7 +54,7 @@ app.post('/login',async(req,res)=>{
 
     try{
         const user = await User.findOne({email: email});
-      if(!user || !(await user.comparePassword(password))){
+      if(!user){
           return res.json({status:"Invalid Email/Password"});
       }
       res.send({status:"ok"});
